@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galería de Fotos FranyVale</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <h1>♥ Nuestra Galería de Amor ♥</h1>
+        <a href="{{ url_for('logout') }}" class="logout-btn">Cerrar Sesión ♥</a>
+    </nav>
+
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="upload-section">
+            <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data">
+                <input type="file" name="photo" accept="image/*" required>
+                <button type="submit">Subir con Amor ♥</button>
+            </form>
+        </div>
+
+        <div class="gallery">
+            {% for photo in photos %}
+            <div class="photo-card">
+                <img src="{{ url_for('static', filename='uploads/' + photo) }}" alt="{{ photo }}">
+                <div class="photo-actions">
+                    <a href="{{ url_for('download_file', filename=photo) }}" class="action-btn download">♥ Descargar</a>
+                    <a href="{{ url_for('delete_file', filename=photo) }}" class="action-btn delete" onclick="return confirm('¿Estás seguro/a de que quieres eliminar esta hermosa foto?')">♥ Eliminar</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
